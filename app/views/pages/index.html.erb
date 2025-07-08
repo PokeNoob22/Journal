@@ -1,0 +1,12 @@
+<h1>HELLO to Journal App</h1>
+
+<% if user_signed_in? %>
+  <div class="welcome-message">
+    <p>Welcome back, <strong><%= current_user.email %></strong>!</p>
+    <p class="current-time">It's currently <%= Time.current.strftime("%A, %B %d %Y at %I:%M %p") %></p>
+  </div>
+<% else %>
+  <p>Please sign in to access your journal.</p>
+<% end %>
+
+<p>Find me in app/views/pages/index.html.erb</p>
