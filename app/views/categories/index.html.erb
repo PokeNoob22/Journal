@@ -1,0 +1,38 @@
+<h1>My Categories</h1>
+
+<% if @categories.empty? %>
+  <p>No categories found. <%= link_to 'Create your first category', new_category_path %></p>
+<% else %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th colspan="3">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @categories.each do |category| %>
+        <tr>
+          <td><%= category.category_name %></td>
+          <td><%= truncate(category.description, length: 50) %></td>
+          <td><%= link_to 'Show', category, class: 'btn btn-sm btn-outline-primary' %></td>
+          <td><%= link_to 'Edit', edit_category_path(category), class: 'btn btn-sm btn-outline-secondary' %></td>
+          <td>
+            <%= link_to 'Delete', 
+                        category_path(category), 
+                        method: :delete, 
+                        data: { 
+                          turbo_method: :delete,
+                          turbo_confirm: 'Are you sure? This will permanently delete the category and ALL its tasks!' 
+                        }, 
+                        class: 'btn btn-sm btn-outline-danger' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link_to 'New Category', new_category_path, class: 'btn btn-primary' %>
