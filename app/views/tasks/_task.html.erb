@@ -1,0 +1,34 @@
+<% if task.persisted? %>
+  <div class="task-card" id="<%= dom_id task %>">
+    <div class="task-main">
+      <span class="task-name"><%= task.task_name %></span>
+      <% if task.due_date %>
+        <span class="due-date">
+          Due: <%= task.due_date.strftime("%b %d, %Y") %>
+        </span>
+      <% end %>
+    </div>
+
+    <% if task.description.present? %>
+      <div class="task-description">
+        <%= task.description %>
+      </div>
+    <% end %>
+
+    <div class="task-actions">
+      <%= link_to 'Edit',
+                  edit_category_task_path(task.category, task),
+                  class: 'btn btn-sm btn-outline-secondary' %>
+
+      <%= button_to 'Delete',
+                    category_task_path(task.category, task),
+                    method: :delete,
+                    form: {
+                      data: {
+                        turbo_confirm: 'Delete this task?'
+                      }
+                    },
+                    class: 'btn btn-sm btn-outline-danger' %>
+    </div>
+  </div>
+<% end %>

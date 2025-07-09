@@ -1,23 +1,54 @@
-<div class="category-header">
-  <h1><%= @category.category_name %></h1>
-  
-  <div class="actions">
-    <%= link_to 'Edit', edit_category_path(@category), class: 'btn btn-secondary' %>
-    <%= link_to 'Delete', 
-                category_path(@category), 
-                method: :delete, 
-                data: { 
-                  turbo_method: :delete,
-                  turbo_confirm: 'WARNING: This will permanently delete this category and ALL its tasks!' 
-                }, 
-                class: 'btn btn-danger' %>
+<div class="category-container">
+  <div class="category-header">
+    <h1><%= @category.category_name %></h1>
+    <p class="category-description"><%= @category.description %></p>
+
+    <div class="category-actions">
+      <%= link_to 'Edit Category', edit_category_path(@category), class: 'btn btn-secondary' %>
+      <%= link_to 'Back to Categories', categories_path, class: 'btn btn-outline-primary' %>
+    </div>
+  </div>
+
+  <div class="tasks-section">
+    <h2>
+      Tasks
+      <span class="badge bg-primary rounded-pill">
+        <%= @category.tasks.count %>
+      </span>
+    </h2>
+
+    <% if @category.tasks.any? %>
+      <div class="tasks-list">
+        <% @category.tasks.each do |task| %>
+          <%= render 'tasks/task', task: task %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="no-tasks">
+        <p>No tasks yet. Add your first task below!</p>
+      </div>
+    <% end %>
+
+    <div class="new-task-form">
+      <h3>Add New Task</h3>
+      <%= form_with(model: [@category, @task || @category.tasks.build], local: true) do |f| %>
+        <div class="mb-3">
+          <%= f.label :task_name, "Task Name", class: "form-label" %>
+          <%= f.text_field :task_name, class: "form-control", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :description, "Description", class: "form-label" %>
+          <%= f.text_area :description, class: "form-control", rows: 3 %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :due_date, "Due Date", class: "form-label" %>
+          <%= f.date_field :due_date, class: "form-control" %>
+        </div>
+
+        <%= f.submit "Add Task", class: "btn btn-primary" %>
+      <% end %>
+    </div>
   </div>
 </div>
-
-<div class="category-details">
-  <h3>Description</h3>
-  <p><%= @category.description.presence || 'No description provided' %></p>
-</div>
-
-<%= link_to 'Back to Categories', categories_path, class: 'btn btn-outline-primary' %>
-

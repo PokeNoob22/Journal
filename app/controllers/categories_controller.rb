@@ -2,19 +2,30 @@ class CategoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_category, only: [:show, :edit, :update, :destroy]
 
+  # GET /categories
   def index
     @categories = current_user.categories
   end
 
+  # GET /categories/1
   def show
+    @category = current_user.categories.find(params[:id])
+    @task = @category.tasks.build # For the new task form
   end
 
+  # GET /categories/new
   def new
     @category = current_user.categories.build
   end
 
+  # GET /categories/1/edit
+  def edit
+  end
+
+  # POST /categories
   def create
     @category = current_user.categories.build(category_params)
+
     if @category.save
       redirect_to @category, notice: 'Category was successfully created.'
     else
@@ -22,9 +33,7 @@ class CategoriesController < ApplicationController
     end
   end
 
-  def edit
-  end
-
+  # PATCH/PUT /categories/1
   def update
     if @category.update(category_params)
       redirect_to @category, notice: 'Category was successfully updated.'
@@ -33,17 +42,19 @@ class CategoriesController < ApplicationController
     end
   end
 
+  # DELETE /categories/1
   def destroy
-  @category = current_user.categories.find(params[:id])
-  @category.destroy
-  redirect_to categories_url, notice: 'Category was successfully deleted.'
-end
+    @category.destroy
+    redirect_to categories_url, notice: 'Category and all its tasks were successfully deleted.'
+  end
 
   private
+    # Use callbacks to share common setup or constraints between actions
     def set_category
       @category = current_user.categories.find(params[:id])
     end
 
+    # Only allow a list of trusted parameters through
     def category_params
       params.require(:category).permit(:category_name, :description)
     end
