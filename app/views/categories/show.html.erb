@@ -1,6 +1,12 @@
 <div class="category-container">
   <div class="category-header">
-    <h1><%= @category.category_name %></h1>
+    <h1>
+  <%= @category.category_name %>
+  <% if @category.priority? %>
+    <span style="color: red;">!</span>
+  <% end %>
+</h1>
+
     <p class="category-description"><%= @category.description %></p>
 
     <div class="category-actions">

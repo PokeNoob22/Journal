@@ -15,7 +15,12 @@
     <tbody>
       <% @categories.each do |category| %>
         <tr>
-          <td><%= category.category_name %></td>
+          <td>
+            <strong><%= category.category_name %></strong>
+            <% if category.priority? %>
+              <span style="color: red;">!</span>
+            <% end %>
+          </td>
           <td><%= truncate(category.description, length: 50) %></td>
           <td><%= link_to 'Show', category, class: 'btn btn-sm btn-outline-primary' %></td>
           <td><%= link_to 'Edit', edit_category_path(category), class: 'btn btn-sm btn-outline-secondary' %></td>
